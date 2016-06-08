@@ -2,10 +2,11 @@
  * In this file, we create a React component
  * which incorporates components providedby material-ui.
  */
-import React, {Component} from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Divider from 'material-ui/Divider';
 
 const styles = {
   menu: {
@@ -19,23 +20,18 @@ const styles = {
   },
 };
 
-class Header extends Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleTouchTap = this.handleTouchTap.bind(this);
-
-    this.state = {
-      open: false,
-    };
-  }
-
+var Header = React.createClass ({
+  getInitialState() {
+    return {
+      open: false
+    }
+  },
+  
   handleRequestClose() {
     this.setState({
       open: false,
     });
-  }
+  },
 
   handleTouchTap(event) {
     // This prevents ghost click.
@@ -45,7 +41,7 @@ class Header extends Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-  }
+  },
 
   render() {
     return (
@@ -56,13 +52,14 @@ class Header extends Component {
               label="Home" 
             />
             <Tab 
-              containerElement={<Link to="/todos" />}
-              label="Todos" 
+              containerElement={<Link to="/test2" />}
+              label="Test2" 
             />
           </Tabs>  
+          <Divider />
       </div>
     );
   }
-}
+})
 
-export default Header;
+module.exports = Header;

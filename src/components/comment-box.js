@@ -5,7 +5,6 @@ import FlatButton from 'material-ui/FlatButton';
 
 var CommentBox = React.createClass({
 	render(){
-		console.log(this.props.comments);
 		return (
 			<div>
 				{this.renderComment()}
@@ -16,7 +15,7 @@ var CommentBox = React.createClass({
 		return (
 			this.props.comments.slice(0, 20).map(function(comment){
 				return (
-					<Card>
+					<Card key={comment.id}>
 				    <CardHeader
 				      title={comment.ups}
 				      subtitle={comment.author}

@@ -1,16 +1,14 @@
-import express from 'express';
+const express = require ('express');
 
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { match, RouterContext } from 'react-router';
+const React = require('react');
+const { renderToString } = require('react-dom/server');
+const { match, RouterContext } = require('react-router');
 
-import { routes } from './routes';
+const { routes } = require('./routes');
 
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
-import config from './webpack.config.js';
-
-global.navigator = { navigator: 'all' };
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('./webpack.config');
 
 const app = express();
 
@@ -25,7 +23,7 @@ app.get('*', (req, res) => {
       // something went badly wrong, so 500 with a message
       res.status(500).send(err.message);
     } else if (redirectLocation) {
-      // we matched a ReactRouter redirect, so redirect from the server
+      // we matched a ReactRouter redirect, so redirect = require(the server
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (props) {
       // if we got props, that means we found a valid component to render
@@ -63,3 +61,5 @@ new WebpackDevServer(webpack(config), {
     }
     console.log('Listening at http://localhost:3001');
 });
+
+app.use(require('webpack-hot-middleware')(webpack(config)));

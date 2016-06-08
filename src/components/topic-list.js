@@ -14,9 +14,9 @@ var TopicList = React.createClass({
 		Reflux.listenTo(TopicStore, 'onChange')
 	],
 	getInitialState() {
-    return{
-    	topics: []
-    }
+	    return{
+	    	topics: []
+	    }
 	},
 	componentWillMount() {
 		Actions.getTopics();

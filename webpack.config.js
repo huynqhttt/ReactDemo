@@ -1,35 +1,30 @@
 const webpack = require('webpack');
 const path = require('path');
 const buildPath = path.resolve(__dirname, 'public');
-const sassPath = path.resolve(__dirname, 'sass');
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
-const NormalModuleReplacementPlugin = webpack.NormalModuleReplacementPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractCSS = new ExtractTextPlugin('main.css');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://0.0.0.0:3001',
     'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client',
     path.join(process.cwd(), 'client-render.js'),
   ],
   output: {
     path: buildPath,
     filename: 'build.js',
+    publicPath: '/public/'
   },
-  plugins: [
-    new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
-    // Enables Hot Modules Replacement
-    new webpack.HotModuleReplacementPlugin(),
-    // Allows error warnings but does not stop compiling.
-    extractCSS,
-    new webpack.NoErrorsPlugin(),
-    new webpack.ProvidePlugin({
-      'Promise': 'es6-promise', // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
-      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
-    })
-  ],
+  resolve: {
+    extensions: ['', '.jsx', '.scss', '.js', '.json'],  // along the way, subsequent file(s) to be consumed by webpack
+    modulesDirectories: [
+      'node_modules',
+      nodeModulesPath
+    ]
+  },
   module: {
     loaders: [
       { 
@@ -37,21 +32,28 @@ module.exports = {
         loader: 'json-loader' 
       },
       {
-        test: /\.js$/,
+        test: /(\.js|\.jsx)$/,
         loaders: ['react-hot', 'babel'],
-        exclude: [nodeModulesPath],
+        exclude: [nodeModulesPath]
       },
       {
-        test: /\.scss$/,
-        loader: extractCSS.extract(['css','sass'])
-      },
-      {
-        test: /\.css$/, 
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+        test: /(\.scss|\.css)$/,
+        loader: ExtractTextPlugin.extract('style', 'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass?sourceMap'),
+        include: [nodeModulesPath], // this also includes flexboxgrid
+        
       }
     ]
   },
-  sassLoader: {
-    includePaths: [sassPath]
-  }
+  postcss: [autoprefixer],
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
+    new ExtractTextPlugin('main.css', { allChunks: true }),
+    // Enables Hot Modules Replacement
+    new webpack.HotModuleReplacementPlugin(),
+    // Allows error warnings but does not stop compiling.
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
+  ],
 }

@@ -46,7 +46,6 @@ var ImageDetail = React.createClass({
     
   },
   renderContent: function() {
-  	console.log(this.state.image);
     return(
     	<div>
 	    	<Card>

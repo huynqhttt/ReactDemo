@@ -1,6 +1,6 @@
 import AppComponent from './src/app';
 import TopicList from './src/components/topic-list';
-import TodosComponent from './src/components/todos';
+import Test2Component from './src/components/test2';
 import Topic from './src/components/topic';
 import ImageDetail from './src/components/image-detail';
 
@@ -13,8 +13,13 @@ const routes = {
       component: TopicList
     },
     {
-      path: '/todos',
-      component: TodosComponent
+      path: '/test2',
+      component: Test2Component,
+      childRoutes: [
+        {
+          path: '',
+        }
+      ]
     },
     {
       path: '/topics/:id',
